@@ -19,12 +19,12 @@ Hệ thống được xây dựng theo kiến trúc **RESTful API + SPA**, đả
 
 ## 🚀 Tổng Quan
 
-- 🔧 Backend: Spring Boot (RESTful API)  
-- 🎨 Frontend: Vue.js (SPA)  
-- 🔐 Xác thực: JWT + Spring Security  
-- 💳 Thanh toán: VNPAY, MoMo 
-- 🤖 Chatbot AI: OpenAI / Gemini  
-- 🗄️ Cơ sở dữ liệu: MySQL  
+- Backend: Spring Boot (RESTful API)  
+- Frontend: Vue.js (SPA)  
+- Xác thực: JWT + Spring Security  
+- Thanh toán: VNPAY, MoMo 
+- Chatbot AI: OpenAI / Gemini  
+- Cơ sở dữ liệu: MySQL  
 
 ---
 
