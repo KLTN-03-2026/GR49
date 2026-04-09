@@ -54,6 +54,7 @@ public class AuthController {
     @PostMapping("/dang-ky")
     public ResponseEntity<?> createUserHandler(@Valid @RequestBody UserRequestDto dto) throws Exception {
         Users saveUser = usersService.registerUser(dto);
+
         // Tạo response dạng JSON
         Map<String, Object> response = new HashMap<>();
         response.put("status", true);

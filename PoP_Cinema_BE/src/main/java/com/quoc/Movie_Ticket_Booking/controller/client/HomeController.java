@@ -34,12 +34,6 @@ public class HomeController {
     private UsersService usersService;
 
 
-    @Autowired
-    private BaiVietService baiVietService;
-
-    @Autowired
-    private VoucherService voucherService;
-
 
     private ResponseEntity<Map<String, Object>> createResponse(String status, Object data, String message) {
         Map<String, Object> response = new HashMap<>();
@@ -57,7 +51,26 @@ public class HomeController {
         return new ResponseEntity<>(dataClientPhim, HttpStatus.OK);
     }
 
+    @PostMapping("/kich-hoat")
+    public ResponseEntity<?> kichHoatTaiKhoan(@RequestParam String maKichHoat)  {
 
+        ApiResponse<?> kichHoatTaiKhoan = usersService.kichHoatTaiKhoan(maKichHoat);
+        return new ResponseEntity<>(kichHoatTaiKhoan, HttpStatus.OK);
+    }
+
+    @PostMapping("/quen-mat-khau")
+    public ResponseEntity<?> getQuenMatKhau(@RequestParam String email) throws Exception {
+
+        ApiResponse<?> quenMatKhau= usersService.forgotPassWord(email);
+        return new ResponseEntity<>(quenMatKhau, HttpStatus.OK);
+    }
+
+    @PostMapping("/dat-lai-mat-khau")
+    public ResponseEntity<?> resetMatKhau(@RequestParam String maReset, @RequestBody ResetMatKhauRequest req) throws Exception {
+
+        ApiResponse<?> resetMatKhau = usersService.resetPassWord(maReset, req);
+        return new ResponseEntity<>(resetMatKhau, HttpStatus.CREATED);
+    }
 
 
 
