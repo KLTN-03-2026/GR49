@@ -171,7 +171,7 @@ cd PoP_Cinema_FE
 npm install
 ```
 
-#### 4. Chạy dự án
+#### 3. Chạy dự án
 ```bash
 npm run dev
 ```
@@ -188,14 +188,14 @@ git clone https://github.com/dangquocne/PoP_Cinema_BE.git
 cd PoP_Cinema_BE
 ```
 
-#### 3. Cấu hình database
+#### 2. Cấu hình database
 ```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/movie_booking_db
 spring.datasource.username=root
 spring.datasource.password=yourpassword
 ```
 
-4. **Chạy dự án**  
+#### 3. Chạy dự án  
 
    Chạy trực tiếp trong **IntelliJ IDEA** hoặc **Spring Tool Suite 4** qua file:  
 
