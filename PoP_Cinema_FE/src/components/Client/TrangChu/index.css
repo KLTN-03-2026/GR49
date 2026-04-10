@@ -1,0 +1,323 @@
+/* ==============================
+   🎬 PHẦN CSS CHO "THẾ GIỚI RẠP CHIẾU PHIM"
+   Dành cho: Dev front-end hoặc người bảo trì dự án sau này
+   Mục đích: Làm đẹp phần thế giới rạp chiếu phim (cinema-world-section)
+   ============================== */
+.cinema-world-section {
+    background: linear-gradient(180deg, #000000, #1a1a1a);
+}
+
+.movie-card-slider img {
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.movie-card-slider {
+    height: 360px;
+    /* 👈 Giới hạn toàn khung */
+    overflow: hidden;
+    border-radius: 16px;
+    background-color: #000;
+}
+
+.movie-card-slider:hover img {
+    transform: scale(1.05);
+    opacity: 0.8;
+}
+
+.movie-overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+}
+
+
+/* ==== Phần dành cho dịch vụ====== */
+.services-section {
+    background: linear-gradient(135deg, #f9fbff 0%, #ffffff 100%);
+}
+
+.service-card {
+    background: #ffffff;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.service-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(13, 110, 253, 0.2);
+}
+
+.icon-wrapper {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    transition: 0.3s ease;
+}
+
+.service-card:hover .icon-wrapper {
+    transform: scale(1.1);
+    background: linear-gradient(135deg, #0d6efd33, #0d6efd11);
+}
+
+
+/* ==== Phần dành cho biểu tượng về chúng tôi===== */
+
+.icon-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.icon-circle:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+}
+
+
+/* ==============================
+   🎬 PHẦN CSS CHO "TIN KHUYẾN MÃI"
+   Dành cho: Dev front-end hoặc người bảo trì dự án sau này
+   Mục đích: Làm đẹp phần khuyến mãi (promo-section)
+   ============================== */
+
+/* ====== CARD CHỨA ẢNH KHUYẾN MÃI ====== */
+.promo-card {
+    position: relative;
+    /* Để overlay và các phần tử con định vị tuyệt đối được */
+    cursor: pointer;
+    /* Biến con trỏ thành bàn tay khi hover */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* Hiệu ứng mượt khi hover */
+}
+
+/* Hiệu ứng khi hover vào card */
+.promo-card:hover {
+    transform: translateY(-6px);
+    /* Nổi lên nhẹ */
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+    /* Đổ bóng để nổi bật */
+}
+
+/* ====== HÌNH ẢNH TRONG CARD ====== */
+.promo-img {
+    height: 200px;
+    /* Cố định chiều cao ảnh */
+    width: 100%;
+    /* Chiếm toàn bộ chiều ngang */
+    object-fit: cover;
+    /* Giữ tỉ lệ ảnh, không méo */
+    transition: transform 0.4s ease;
+    /* Hiệu ứng phóng nhẹ khi hover */
+}
+
+/* Khi hover card thì ảnh zoom nhẹ */
+.promo-card:hover .promo-img {
+    transform: scale(1.05);
+}
+
+/* ====== PHẦN NỀN MỜ & TEXT TRÊN ẢNH ====== */
+.promo-overlay {
+    position: absolute;
+    /* Đặt đè lên ảnh */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    /* Trải hết chiều ngang ảnh */
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+    /* Hiệu ứng mờ tối phía dưới */
+    color: white;
+    /* Chữ màu trắng cho nổi */
+    padding: 10px 15px;
+    /* Tạo khoảng đệm cho text */
+}
+
+/* ====== NÚT MŨI TÊN ĐIỀU HƯỚNG SLIDE ====== */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-size: 50%, 50%;
+    /* Giảm kích thước icon mặc định của Bootstrap */
+}
+
+/* Có thể thêm tuỳ chỉnh màu, viền cho nút nếu muốn */
+
+
+/* ==============================
+   🎬 PHẦN CSS CHO "PHẢN HỒI KHÁCH HÀNG"
+   Dành cho: Dev front-end hoặc người bảo trì dự án sau này
+   Mục đích: Làm đẹp phần phản hồi khách hàng (testimonials)
+   ============================== */
+.testimonials {
+    background: radial-gradient(circle at top, #020b3a, #000);
+    /* nền xanh tím nhẹ, chỉ phần này */
+    padding: 60px 0;
+    border-radius: 20px;
+    /* bo nhẹ cho đẹp */
+}
+
+.testimonial-card {
+    background: rgba(10, 20, 60, 0.9);
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    transition: all 0.4s ease;
+    height: 100%;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0, 80, 255, 0.3);
+    background: rgba(15, 35, 90, 0.95);
+}
+
+.testimonial-card img {
+    border: 2px solid #007bff;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+}
+
+.testimonials h3 {
+    text-shadow: 0 0 8px rgba(0, 150, 255, 0.6);
+}
+
+
+/* ==============================
+   🎬 PHẦN CSS CHO "PHIM ĐANG CHIẾU"
+   Dành cho: Dev front-end hoặc người bảo trì dự án sau này
+   Mục đích: Làm đẹp phần phim mới phát hành (new-releases)
+   ============================== */
+.movie-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.movie-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.rating-badge {
+    font-size: 0.9rem;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.age-badge {
+    font-size: 0.9rem;
+    background: #ffc107;
+}
+
+.btn-outline-darkblue {
+    color: #002D72;
+    /* xanh đậm */
+    border: 2px solid #002D72;
+    background-color: transparent;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-darkblue:hover {
+    background-color: #002D72;
+    color: #fff;
+}
+
+.btn-outline-darkblue-light {
+    color: #002D72;
+    /* xanh đậm */
+    border: 1px solid #002D72;
+    background-color: rgba(0, 45, 114, 0.05);
+    /* xanh đậm nhạt nền */
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-darkblue-light:hover {
+    background-color: #002D72;
+    color: #fff;
+}
+
+.btn-outline-darkblue-square {
+    color: #002D72;
+    /* xanh đậm */
+    border: 1px solid #002D72;
+    background-color: rgba(0, 45, 114, 0.02);
+    /* nền trắng hơn, chỉ hơi ám xanh nhẹ */
+    font-weight: 500;
+    border-radius: 6px;
+    /* vuông như hình */
+    transition: all 0.3s ease;
+}
+
+.btn-outline-darkblue-square:hover {
+    background-color: #002D72;
+    color: #fff;
+}
+
+
+/* ==============================
+   🎬 PHẦN CSS CHO "BÀI VIẾT NỔI BẬT"
+   Dành cho: Dev front-end hoặc người bảo trì dự án sau này
+   Mục đích: Làm đẹp phần bài viết nổi bật (featured-articles)
+   ============================== */
+/* ẢNH LỚN ZOOM MỀM KHI HOVER */
+.hover-zoom {
+    transition: 0.4s ease;
+}
+.hover-zoom:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25) !important;
+}
+.featured-img {
+    height: 420px;
+    object-fit: cover;
+    transition: 0.45s ease;
+}
+.hover-zoom:hover .featured-img {
+    transform: scale(1.06);
+}
+
+/* TIÊU ĐỀ ĐỔI MÀU KHI HOVER */
+.hover-title {
+    transition: 0.25s;
+}
+.hover-title:hover {
+    color: #007bff !important;
+}
+
+/* REVIEW ITEM - chỉ hover ảnh nhỏ, không nền, tiêu đề đứng im */
+.review-item {
+    display: flex;
+    padding: 6px;
+    transition: none; /* bỏ mọi hiệu ứng dịch chuyển */
+    background: transparent; /* không đổi nền */
+    box-shadow: none;
+}
+
+/* THUMB WRAPPER - chứa ảnh nhỏ */
+.thumb-wrapper {
+    width: 200px; /* tăng từ 160px */
+    height: 140px; /* tăng từ 95px */
+    overflow: hidden;
+    transition: 0.35s ease;
+}
+
+/* ẢNH NHỎ ZOOM */
+.thumb-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+}
+
+.thumb-wrapper:hover img {
+    transform: scale(1.05); /* chỉ ảnh zoom khi hover */
+}
+/* 2 dòng cho tiêu đề nhỏ */
