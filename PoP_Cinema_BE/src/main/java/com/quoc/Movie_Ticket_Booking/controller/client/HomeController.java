@@ -34,6 +34,12 @@ public class HomeController {
     private UsersService usersService;
 
 
+    @Autowired
+    private BaiVietService baiVietService;
+
+    @Autowired
+    private VoucherService voucherService;
+
 
     private ResponseEntity<Map<String, Object>> createResponse(String status, Object data, String message) {
         Map<String, Object> response = new HashMap<>();
@@ -50,6 +56,29 @@ public class HomeController {
         Map<String, Object> dataClientPhim = phimService.getDataClientPhim();
         return new ResponseEntity<>(dataClientPhim, HttpStatus.OK);
     }
+
+    @GetMapping("/bai-viet/get-data")
+    public ResponseEntity<?> getDataBaiViet()  {
+
+        ApiResponse<?> dataClientBaiViet = baiVietService.getDataClientBaiViet();
+        return new ResponseEntity<>(dataClientBaiViet, HttpStatus.OK);
+    }
+
+    @GetMapping("/chi-tiet-bai-viet/get-data/{id}")
+    public ResponseEntity<?> getChiTietBaiViet(@PathVariable Long id)  {
+
+        ApiResponse<?> dataClientBaiViet = baiVietService.getChiTietBaiViet(id);
+        return new ResponseEntity<>(dataClientBaiViet, HttpStatus.OK);
+    }
+
+
+//    @GetMapping("/chi-tiet-phim/{id}")
+//    public ResponseEntity<Phim> getChiTietPhim(@PathVariable Long id)  {
+//
+//        Phim phim = phimService.getPhimById(id);
+//        return new ResponseEntity<>(phim, HttpStatus.OK);
+//    }
+
 
     @PostMapping("/kich-hoat")
     public ResponseEntity<?> kichHoatTaiKhoan(@RequestParam String maKichHoat)  {
@@ -70,6 +99,14 @@ public class HomeController {
 
         ApiResponse<?> resetMatKhau = usersService.resetPassWord(maReset, req);
         return new ResponseEntity<>(resetMatKhau, HttpStatus.CREATED);
+    }
+
+
+    @GetMapping("/get-qua-voucher")
+    public ResponseEntity<?> getAllQuaVoucher()  {
+        List<QuaVoucherResponseDto> allVoucher = voucherService.getAllQuaVoucher();
+        ApiResponse<?> success = ApiResponse.success("Hiển thị danh sách qua voucher thành công!", allVoucher);
+        return new ResponseEntity<>(success, HttpStatus.OK);
     }
 
 

@@ -31,6 +31,51 @@ public class CommonUtil {
     private DonHangRepository donHangRepository;
     String msg=null;
 
+
+    //Dùng đề khi thanh toán đơn hàng
+
+    @Async
+    public void sendEmailForProductOrder(DonHangDetailsResponseDto dto)throws Exception {
+        List<VeDetailsResponseDto> ds_ve = donHangRepository.getVeByMaDonHangForUser(dto.getMaDonHang());
+        VeDetailsResponseDto ve= ds_ve.get(0);
+
+        // Nối danh sách ghế thành chuỗi "A01, A02, A03"
+        String seats = ds_ve.stream()
+                .map(VeDetailsResponseDto::getTenGhe)   // lấy tên ghế từ từng vé
+                .collect(Collectors.joining(", "));
+        msg="  <img src=\"https://res.cloudinary.com/dvxkhsfyj/image/upload/v1756395686/popcorn-removebg-preview_mkbjoj.png\"\n" +
+                "                                            height=\"100\" alt=\"\" loading=\"lazy\" />"
+                +"<hr>"
+                +"<p>Xin chào </p>"
+                +"</hr>"
+                + "<p>Bạn đã đặt vé thành công tại PoP Cinema. Mã đặt vé: <b>[[maDonHang]]</b></p>"
+                + "<p>Phim: [[tenPhim]], Suất chiếu: [[thoiGianBatDau]]-[[thoiGianKetThuc]] , Ngày: [[ngayChieu]], Ghế: [[ghe]], Rạp: PoP Cenima</p>"
+                +"<hr>"
+                + "<p>Email này được gửi tự động. Vui lòng không trả lời email này. Nếu gặp sự cố, vui lòng gọi <a href=\"tel:[[supportPhone]]\">0905923427</a> hoặc email <a href=\"mailto:[[supportEmail]]\">huynhdangquoctuan@gmail.com </a> để được hỗ trợ.</p>"
+                + "<p>Trân trọng cảm ơn,<br>"
+                +"Đội Ngũ Hỗ Trợ PoP Cinema.</p>";
+
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
+
+        helper.setFrom("huynhdangquoctuan@gmail.com","PoP Cinema Service");
+        helper.setTo(dto.getEmail());
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        msg=msg.replace("[[maDonHang]]",dto.getMaDonHang());
+        msg=msg.replace("[[tenPhim]]",dto.getTenPhim());
+       msg = msg.replace("[[thoiGianBatDau]]", ve.getThoiGianBatDau().format(timeFormatter));
+        msg = msg.replace("[[thoiGianKetThuc]]",ve.getThoiGianKetThuc().format(timeFormatter));
+        msg=msg.replace("[[ngayChieu]]",ve.getNgayChieu().toString());
+        msg=msg.replace("[[ghe]]",seats);
+
+
+        helper.setSubject("PoP Đặt Vé Phim Thành Công");
+        helper.setText(msg,true);
+        mailSender.send(mimeMessage);
+//        return true;
+
+    }
+
     private void sendEmail(EmailRequest emailRequest) throws Exception{
 
         MimeMessage mimeMessage = mailSender.createMimeMessage();
