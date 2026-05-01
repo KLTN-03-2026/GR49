@@ -14,6 +14,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -308,5 +309,12 @@ public class SuatChieuServiceImpl implements SuatChieuService {
     public List<SuatChieu> getSuatChieuByPhimId(Long id) {
         List<SuatChieu> dsSuatChieu = suatChieuRepository.findByPhimIdAndTinhTrang(id, 1);
         return dsSuatChieu;
+    }
+
+    @Override
+    public List<SuatChieu> getSuatChieuForChat(Long phimId, LocalDate ngay) {
+        return suatChieuRepository.findByPhim_IdAndNgayChieuAndTinhTrangOrderByThoiGianBatDauAsc(
+                phimId, ngay, 1
+        );
     }
 }

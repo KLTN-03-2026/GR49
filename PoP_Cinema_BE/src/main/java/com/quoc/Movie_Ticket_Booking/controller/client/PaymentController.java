@@ -40,7 +40,7 @@ public class PaymentController {
 
     @GetMapping("/cancel")
     public void paymentCancel(@RequestParam String maDonHang, HttpServletResponse response) throws IOException {
-        paymentService.cancel(maDonHang);
+        paymentService.cancel(maDonHang,3);
         response.sendRedirect("http://localhost:5173/cancel");
     }
 
@@ -50,7 +50,7 @@ public class PaymentController {
     public void paymentSuccess(@RequestParam String maDonHang,
                                @RequestParam String maGiaoDich,
                                HttpServletResponse response) throws IOException {
-        paymentService.success(maDonHang);
+        paymentService.success(maDonHang,3);
         response.sendRedirect("http://localhost:5173/success?madonhang=" + maDonHang + "&magiaodich=" + maGiaoDich);
     }
 
@@ -66,12 +66,12 @@ public class PaymentController {
 
             if ("00".equals(status)) {
                 //  Cập nhật trạng thái đơn hàng trong DB
-                paymentService.success(maDonHang);
+                paymentService.success(maDonHang,2);
 
                 //  Redirect sang trang success trên frontend
                 response.sendRedirect("http://localhost:5173/success?madonhang="+ maDonHang + "&magiaodich=" + maGiaoDich);
             } else if ("24".equals(status)) {
-                paymentService.cancel(maDonHang);
+                paymentService.cancel(maDonHang,2);
                 response.sendRedirect("http://localhost:5173/cancel");
             }
 
@@ -87,14 +87,14 @@ public class PaymentController {
 
         if ("0".equals(resultCode)) {
             // Thành công
-            paymentService.success(orderId);
+            paymentService.success(orderId,1);
 
             response.sendRedirect("http://localhost:5173/success?madonhang="
                     + orderId + "&magiaodich=" + transId);
 
         } else {
             // Thất bại / huỷ
-            paymentService.cancel(orderId);
+            paymentService.cancel(orderId,1);
 
             response.sendRedirect("http://localhost:5173/cancel");
         }

@@ -3,6 +3,8 @@ package com.quoc.Movie_Ticket_Booking.repository;
 import com.quoc.Movie_Ticket_Booking.model.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface UsersRepository extends JpaRepository<Users, Long> {
 
 
@@ -11,4 +13,7 @@ public interface UsersRepository extends JpaRepository<Users, Long> {
     public Users findByHashActive(String maKichHoat);
 
     public Users findByHashReset(String maReset);
+
+    List<Users> findTop5ByOrderByDiemDesc();
+
 }

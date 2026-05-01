@@ -41,6 +41,28 @@ public class ChiTietPhimController {
         }
     }
 
- 
+    @GetMapping("/get-goi-y")
+    public ResponseEntity<?> getDataPhimGoiY()  {
+
+        ApiResponse<?> phimGoiY = phimService.getPhimGoiY();
+        return new ResponseEntity<>(phimGoiY, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-danh-gia")
+    public ResponseEntity<ApiResponse<?>> getDanhGia(@RequestParam Long idPhim) {
+        ApiResponse<?> getDanhGia = danhGiaBinhLuanService.getDanhGia(idPhim);
+
+
+        return new ResponseEntity<>(getDanhGia, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-binh-luan")
+    public ResponseEntity<ApiResponse<?>> getBinhLuan(@RequestParam Long idPhim) {
+
+        ApiResponse<?> getBinhLuan = danhGiaBinhLuanService.getBinhLuan(idPhim);
+
+
+        return new ResponseEntity<>(getBinhLuan, HttpStatus.OK);
+    }
 
 }

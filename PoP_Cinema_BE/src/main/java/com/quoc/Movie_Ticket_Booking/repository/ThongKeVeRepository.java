@@ -49,7 +49,7 @@ public interface ThongKeVeRepository extends JpaRepository<Ve,Long> {
     JOIN Phim p ON s.phim.id = p.id
     JOIN DonHang d ON v.donHang.id = d.id
     JOIN Users u ON d.khachHang.id = u.id
-    WHERE d.ngayDat BETWEEN :ngayBatDau AND :ngayKetThuc
+    WHERE d.ngayDat BETWEEN :ngayBatDau AND :ngayKetThuc  AND d.isThanhToan = 1
     GROUP BY d.id, u.hoVaTen, p.tenPhim, d.tienThucNhan
     ORDER BY d.ngayDat DESC
 """)
@@ -58,12 +58,12 @@ public interface ThongKeVeRepository extends JpaRepository<Ve,Long> {
 
     // Thống ke phim phổ biến
     @Query("""
-     SELECT new com.quoc.Movie_Ticket_Booking.dto.response.PhimPhoBienResponseDto(p.tenPhim,p.theLoai,COUNT(v.id))
+     SELECT new com.quoc.Movie_Ticket_Booking.dto.response.PhimPhoBienResponseDto(p.hinhAnh,p.tenPhim,p.theLoai,COUNT(v.id))
     FROM Ve v
     JOIN SuatChieu s ON v.suatChieu.id = s.id
     JOIN Phim p ON s.phim.id = p.id
     WHERE v.tinhTrang = 2 
-    GROUP BY p.tenPhim,p.theLoai
+    GROUP BY p.hinhAnh,p.tenPhim,p.theLoai
     ORDER BY COUNT(v.id) DESC
     LIMIT 5
 """)

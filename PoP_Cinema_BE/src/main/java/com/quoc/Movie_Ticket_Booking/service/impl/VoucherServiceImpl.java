@@ -8,6 +8,7 @@ import com.quoc.Movie_Ticket_Booking.model.*;
 import com.quoc.Movie_Ticket_Booking.repository.*;
 import com.quoc.Movie_Ticket_Booking.service.PhanQuyenService;
 import com.quoc.Movie_Ticket_Booking.service.VoucherService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,6 +58,9 @@ public class VoucherServiceImpl implements VoucherService {
         Voucher voucher = new Voucher();
         voucher.setMaCode(voucherRequestDto.getMaCode());
         voucher.setTenVoucher(voucherRequestDto.getTenVoucher());
+        voucher.setSoDiem(voucherRequestDto.getSoDiem());
+        voucher.setHinhAnh(voucherRequestDto.getHinhAnh());
+        voucher.setMoTa(voucherRequestDto.getMoTa());
         voucher.setThoiGianBatDau(voucherRequestDto.getThoiGianBatDau());
         voucher.setThoiGianKetThuc(voucherRequestDto.getThoiGianKetThuc());
         voucher.setSoGiamGia(voucherRequestDto.getSoGiamGia());
@@ -84,6 +88,15 @@ public class VoucherServiceImpl implements VoucherService {
         }
         if (updateDto.getTenVoucher()!= null) {
             voucher.setTenVoucher(updateDto.getTenVoucher());
+        }
+        if (updateDto.getSoDiem()!= null) {
+            voucher.setSoDiem(updateDto.getSoDiem());
+        }
+        if (updateDto.getHinhAnh()!= null) {
+            voucher.setHinhAnh(updateDto.getHinhAnh());
+        }
+        if (updateDto.getMoTa()!= null) {
+            voucher.setMoTa(updateDto.getMoTa());
         }
         if (updateDto.getThoiGianBatDau()!= null) {
             voucher.setThoiGianBatDau(updateDto.getThoiGianBatDau());
@@ -120,10 +133,16 @@ public class VoucherServiceImpl implements VoucherService {
 
         Voucher voucherById = getVoucherById(id);
 
-        // ✅ Kiểm tra ràng buộc: voucher đã được sử dụng trong đơn hàng chưa
+        // Kiểm tra ràng buộc: voucher đã được sử dụng trong đơn hàng chưa
         boolean daSuDung = donHangRepository.existsByVoucherId(id);
         if (daSuDung) {
             return ApiResponse.fail("Không thể xóa voucher này vì đã được sử dụng trong đơn hàng!");
+        }
+
+        // Kiểm tra có khách hàng nào đã đổi voucher này chưa (dù dùng hay chưa)
+        boolean daCoKhachDoiQua = quaVoucherRepository.existsByVoucherId(id);
+        if (daCoKhachDoiQua) {
+            return ApiResponse.fail("Không thể xóa voucher này vì đã có khách hàng đổi quà!");
         }
 
         voucherRepository.delete(voucherById);
@@ -201,14 +220,13 @@ public class VoucherServiceImpl implements VoucherService {
     }
 
 
-
-
     @Override
     public List<Voucher> getVoucherByTinhTrang() {
         return voucherRepository.findByTinhTrang(1);
     }
 
 
+    @Transactional
     @Override
     public ApiResponse<?> doiQuaVoucher(Long voucherId, Long userId) {
         Users user = usersRepository.findById(userId)
@@ -291,20 +309,34 @@ public class VoucherServiceImpl implements VoucherService {
     }
 
     @Override
-    public ApiResponse<?> findQuaVoucherByMaCode(String maCode,Long userId) {
-        LocalDate now= LocalDate.now();
-        Optional<QuaVoucher> validVoucher = quaVoucherRepository.findValidQuaVoucher(maCode,userId,now);
+    public ApiResponse<?> findQuaVoucherByMaCode(String maCode,Integer tongTienDonHang, Long userId) {
+        LocalDate now = LocalDate.now();
+        Optional<QuaVoucher> validVoucher = quaVoucherRepository.findValidQuaVoucher(maCode, userId, now);
 
-        if (validVoucher.isPresent()) {
-
-            return ApiResponse.success( "Đã áp mã voucher thành công!",validVoucher.get());
-
-        }else {
-
+        if (validVoucher.isEmpty()) {
             return ApiResponse.fail("Voucher không tồn tại, đã hết hạn hoặc đã sử dụng!");
-
         }
+
+        QuaVoucher voucher = validVoucher.get();
+
+        // 🔥 Kiểm tra đơn hàng có đạt tối thiểu để dùng voucher không
+        if (voucher.getVoucher().getSoTienToiDa()!= null
+                && tongTienDonHang < voucher.getVoucher().getSoTienToiDa()) {
+            return ApiResponse.fail(
+                    "Đơn hàng tối thiểu " + formatTien(voucher.getVoucher().getSoTienToiDa())
+                            + " mới được áp dụng voucher này! "
+                            + "(Đơn của bạn: " + formatTien(tongTienDonHang) + ")"
+            );
+        }
+
+        return ApiResponse.success("Đã áp mã voucher thành công!", voucher);
     }
+
+    // 🔥 Format tiền cho dễ đọc
+    private String formatTien(Integer tien) {
+        return String.format("%,d đ", tien).replace(",", ".");
+    }
+
 
     @Override
     public List<QuaVoucherResponseDto> getAllQuaVoucher() {
@@ -318,12 +350,14 @@ public class VoucherServiceImpl implements VoucherService {
     private QuaVoucherResponseDto mapToQuaVoucherDto(Voucher voucher) {
         return new QuaVoucherResponseDto (
                 voucher.getId(),
+                voucher.getHinhAnh(),
                 voucher.getTenVoucher(),
+                voucher.getMoTa(),
                 voucher.getThoiGianBatDau(),
                 voucher.getThoiGianKetThuc(),
                 voucher.getSoTienGiamGia(),
-                voucher.getSoDiem(),
-                voucher.getTinhTrang()
+                voucher.getSoTienToiDa(),
+                voucher.getSoDiem()
         );
     }
 

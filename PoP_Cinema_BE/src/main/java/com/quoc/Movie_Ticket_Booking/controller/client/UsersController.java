@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -82,9 +83,12 @@ public class UsersController {
     }
 
     @GetMapping("/get-lich-su-diem")
-    public ResponseEntity<?> getLichSuTichDiem(@RequestHeader("Authorization") String jwt) {
+    public ResponseEntity<?> getLichSuTichDiem(@RequestParam(required = false) LocalDate ngayTruoc,
+                                               @RequestParam(required = false) LocalDate ngaySau,
+                                               @RequestParam(required = false) Integer tinhTrang,
+                                               @RequestHeader("Authorization") String jwt) {
         Users users= usersService.findUserByJwtToken(jwt);
-        ApiResponse<?> ls = tichDiemService.getLichSuTichDiem(users.getId());
+        ApiResponse<?> ls = tichDiemService.getLichSuTichDiem(users.getId(), ngayTruoc, ngaySau, tinhTrang);
         return new ResponseEntity<>(ls, HttpStatus.OK);
     }
 

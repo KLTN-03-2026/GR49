@@ -6,9 +6,7 @@ import com.quoc.Movie_Ticket_Booking.dto.request.ThayDoiThongTinUserRequestDto;
 import com.quoc.Movie_Ticket_Booking.dto.response.ApiResponse;
 import com.quoc.Movie_Ticket_Booking.model.NhanVien;
 import com.quoc.Movie_Ticket_Booking.model.Users;
-import com.quoc.Movie_Ticket_Booking.service.NhanVienService;
-import com.quoc.Movie_Ticket_Booking.service.ThongTinNhanVien;
-import com.quoc.Movie_Ticket_Booking.service.UsersService;
+import com.quoc.Movie_Ticket_Booking.service.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +27,9 @@ public class AdminTokenController {
 
     @Autowired
     private ThongTinNhanVien thongTinNhanVien;
+
+    @Autowired
+    private CheckInService checkInService;
 
     @GetMapping("/check-token")
     public ResponseEntity<Map<String, Object>> checkToken(@RequestHeader("Authorization") String jwt){
@@ -63,5 +64,17 @@ public class AdminTokenController {
         ApiResponse<?> updateThongTinCaNhan = thongTinNhanVien.updateThongTinCaNhan(req, jwt);
 
         return new ResponseEntity<>(updateThongTinCaNhan, HttpStatus.OK);
+    }
+
+    @GetMapping("/check-in")
+    public ResponseEntity<ApiResponse> checkIn(@RequestParam String qr) {
+
+        ApiResponse response = checkInService.checkIn(qr);
+
+        if (!response.isStatus()) {
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        return ResponseEntity.ok(response);
     }
 }

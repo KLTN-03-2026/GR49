@@ -3,6 +3,7 @@ package com.quoc.Movie_Ticket_Booking.controller.client;
 import com.quoc.Movie_Ticket_Booking.dto.response.DonHangDetailsResponseDto;
 import com.quoc.Movie_Ticket_Booking.exception.ResourceNotFoundException;
 import com.quoc.Movie_Ticket_Booking.model.DonHang;
+import com.quoc.Movie_Ticket_Booking.model.NhanVien;
 import com.quoc.Movie_Ticket_Booking.model.Users;
 import com.quoc.Movie_Ticket_Booking.repository.DonHangRepository;
 import com.quoc.Movie_Ticket_Booking.service.DichVuService;
@@ -98,6 +99,12 @@ public class DonHangsController {
 
         Map<String, Object> dataChiTietDichVu = dichVuService.getDataChiTietDichVu(idDonHang);
         return createResponse("success", dataChiTietDichVu, "Hiển thị  thành công thành công.");
+    }
+
+    @PostMapping("/in-ve/{maDonHang}")
+    public ResponseEntity<?> getHoaDon(@PathVariable("maDonHang") String maDonHang,@RequestHeader("Authorization") String jwt)  {
+        Map<String, Object> byHoaDon = donHangService.getByHoaDon(maDonHang);
+        return new ResponseEntity<>(byHoaDon, HttpStatus.OK);
     }
 
     private ResponseEntity<Map<String, Object>> createResponse(String status, Object data, String message) {

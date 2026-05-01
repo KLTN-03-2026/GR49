@@ -54,6 +54,7 @@ public class DonHangServiceImpl implements DonHangService {
 
 
     //Đặt vé
+    @Transactional
     @Override
     public Map<String, Object> Payment(DatVeRequestDto datVeRequestDto,Long idUser) {
         Map<String, Object> response = new HashMap<>();
@@ -149,7 +150,7 @@ public class DonHangServiceImpl implements DonHangService {
             // 3. Tính giảm giá
             if (voucher != null && tongTien >= voucher.getSoTienToiDa()) {
 
-                tienGiamGia = tongTien * voucher.getSoGiamGia();
+                tienGiamGia = tongTien * voucher.getSoGiamGia() / 100;
 
                 if (tienGiamGia > voucher.getSoTienGiamGia()) {
 
@@ -216,6 +217,7 @@ public class DonHangServiceImpl implements DonHangService {
         donHang.setIsThanhToan(0);
         donHang.setPhuongThucThanhToan(0);
         donHang.setVoucher(voucher);
+        donHang.setQrCode("QR"+shortId);
         return donHangRepository.save(donHang);
 
     }
@@ -277,37 +279,40 @@ public class DonHangServiceImpl implements DonHangService {
    //Xoá đơn hàng
     @Transactional
     @Override
-    public ApiResponse<?> deleteDonHangById(Long idDonHang,NhanVien nhanVienId) {
+    public ApiResponse<?> deleteDonHangById(Long idDonHang, NhanVien nhanVienId) {
 
         long idChucNang = 12;
         long idChucVu = nhanVienId.getChucVu().getId();
 
         //Kiểm tra quyền
-        if(!permissionService.checkQuyen(idChucNang,idChucVu)){
+        if (!permissionService.checkQuyen(idChucNang, idChucVu)) {
             return ApiResponse.fail("Bạn không có quyền thực hiện chức năng này!");
         }
 
-        Optional<DonHang> optionalDonHang = donHangRepository.findByIdAndIsThanhToanIn(idDonHang,  Arrays.asList(0, 2));
+        Optional<DonHang> optionalDonHang = donHangRepository.findByIdAndIsThanhToanIn(idDonHang, Arrays.asList(0, 2));
         if (optionalDonHang.isEmpty()) {
             throw new ResourceNotFoundException("Đơn hàng không tồn tại hoặc đã thanh toán, id = " + idDonHang);
         }
 
-        DonHang donHang= optionalDonHang.get();
+        DonHang donHang = optionalDonHang.get();
         // Xoá chi tiết dịch vụ
-            deleteChitietDichVu(donHang.getId());
+        deleteChitietDichVu(donHang.getId());
+
+        // Xoá chi tích điểm
+        deleteTichDiem(donHang.getId());
 
         //Lưu tất cả các vé theo mã don hàng là null khi huỷ đơn hàng
-            List<Ve> ves = veRepository.findByDonHangId(idDonHang);
-            for (Ve ve : ves) {
-                ve.setDonHang(null);
-                ve.setTinhTrang(1);
-                veRepository.save(ve);
-            }
-            donHangRepository.delete(donHang);
+        List<Ve> ves = veRepository.findByDonHangId(idDonHang);
+        for (Ve ve : ves) {
+            ve.setDonHang(null);
+            ve.setTinhTrang(1);
+            veRepository.save(ve);
+        }
+        donHangRepository.delete(donHang);
 
         return ApiResponse.success("Xoá đơn hàng thành công");
 
-        }
+    }
 
 
     private void deleteChitietDichVu(Long idDonHang) {
@@ -315,25 +320,29 @@ public class DonHangServiceImpl implements DonHangService {
         chiTietDichVuRepository.deleteByDonHangId(idDonHang);
     }
 
+    private void deleteTichDiem(Long idDonHang) {
+        tichDiemRepository.deleteByDonHangId(idDonHang);
+    }
+
 
     //Hiển thị thông tin đơn hàng cho vé in
     @Override
-    public Map<String, Object> getByHoaDon(String maDonHang,NhanVien nhanVienId) {
+    public Map<String, Object> getByHoaDon(String maDonHang) {
         Map<String, Object> response = new HashMap<>();
 
-        long idChucNang = 12;
-        long idChucVu = nhanVienId.getChucVu().getId();
+//        long idChucNang = 12;
+//        long idChucVu = nhanVienId.getChucVu().getId();
+//
+//        //Kiểm tra quyền
+//        if(!permissionService.checkQuyen(idChucNang,idChucVu)){
+//            response.put("status",false);
+//            response.put("message", "Bạn không có quyền thực hiện chức năng này!");
+//            return response;
+//        }
 
-        //Kiểm tra quyền
-        if(!permissionService.checkQuyen(idChucNang,idChucVu)){
-            response.put("status",false);
-            response.put("message", "Bạn không có quyền thực hiện chức năng này!");
-            return response;
-        }
-
-        List<DonHangResponseDto> dataList = donHangRepository.getDonHangByMaDonHang(maDonHang);
+        List<InVeResponseDto> dataList = donHangRepository.getDonHangByMaDonHang(maDonHang);
         //Lấy 1 hoá đơn duy nhất nếu có nhiều vé
-        DonHangResponseDto data = dataList.isEmpty() ? null : dataList.get(0);
+        InVeResponseDto data = dataList.isEmpty() ? null : dataList.get(0);
 
         List<AllVeResponseDto> ds_ve = donHangRepository.getVeByMaDonHang(maDonHang);
         List<ChiTietDichVuResponseDto> dsDichVu = chiTietDichVuRepository.getDichVuByMaDonHang(maDonHang);

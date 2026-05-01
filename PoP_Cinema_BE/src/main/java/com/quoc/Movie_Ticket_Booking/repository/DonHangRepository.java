@@ -26,13 +26,13 @@ public interface DonHangRepository extends JpaRepository<DonHang, Long> {
     Optional<DonHang> findByIdAndIsThanhToanIn(Long idDonHang, List<Integer> isThanhToan);
 
     //Hiển thị đơn hàng theo mã đơn hàng cho admin
-    @Query("SELECT DISTINCT new com.quoc.Movie_Ticket_Booking.dto.response.DonHangResponseDto(dh.maDonHang,dh.ngayDat, p.tenPhim, p.theLoai,sc.ngayChieu, sc.thoiGianBatDau,sc.thoiGianKetThuc , sc.phongChieu.tenPhong,dh.tongTien,dh.tienThucNhan,dh.giamGia) " +
+    @Query("SELECT DISTINCT new com.quoc.Movie_Ticket_Booking.dto.response.InVeResponseDto(dh.maDonHang,dh.ngayDat, p.tenPhim, p.theLoai,sc.ngayChieu, sc.thoiGianBatDau,sc.thoiGianKetThuc , sc.phongChieu.tenPhong,dh.tongTien,dh.tienThucNhan,dh.giamGia,dh.qrCode) " +
             "FROM DonHang dh " +
             "JOIN  Ve v ON v.donHang.id = dh.id " +
             "JOIN  SuatChieu sc ON sc.id = v.suatChieu.id " +
             "JOIN  Phim p ON p.id = sc.phim.id " +
             "WHERE dh.maDonHang = :maDonHang")
-    public List<DonHangResponseDto> getDonHangByMaDonHang(@Param("maDonHang") String maDonHang);
+    public List<InVeResponseDto> getDonHangByMaDonHang(@Param("maDonHang") String maDonHang);
 
 
     //Hiển thị vé theo mã đơn hàng cho admin
@@ -136,4 +136,17 @@ public interface DonHangRepository extends JpaRepository<DonHang, Long> {
     Long countLichSuDonHang(@Param("userId") Long userId,  @Param("fromDate") LocalDateTime fromDate);
 
 
+    Optional<DonHang> findByQrCode(String qrCode);
+
+    @Query("""
+    SELECT new com.quoc.Movie_Ticket_Booking.dto.response.DonHangForQRcodeResponseDto(
+        d.id,
+        d.maDonHang,
+        d.ngayDat,
+        d.tienThucNhan
+    )
+    FROM DonHang d
+    WHERE d.id = :id
+""")
+    DonHangForQRcodeResponseDto getDonHangById(@Param("id") Long id);
 }

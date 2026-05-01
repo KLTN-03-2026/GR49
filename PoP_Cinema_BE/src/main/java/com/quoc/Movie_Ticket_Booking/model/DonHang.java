@@ -49,6 +49,12 @@ public class DonHang {
     @Column(name = "phuong_thuc_thanh_toan")
     private Integer phuongThucThanhToan;
 
+    @Column(name = "qr_code")
+    private String qrCode; // mã QR để quét
+
+    @Column(name = "checked_in")
+    private boolean checkedIn = false; // đã vào rạp chưa
+
 
     public static final int CHUA_THANH_TOAN = 0;
     public static final int DA_THANH_TOAN = 1;

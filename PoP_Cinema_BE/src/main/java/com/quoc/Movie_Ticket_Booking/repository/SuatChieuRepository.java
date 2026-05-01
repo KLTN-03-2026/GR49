@@ -77,5 +77,10 @@ public interface SuatChieuRepository extends JpaRepository<SuatChieu, Long> {
                                        @Param("ngayKetThuc") LocalDate ngayKetThuc);
 
 
+   List<SuatChieu> findByPhim_IdAndNgayChieuAndTinhTrangOrderByThoiGianBatDauAsc(
+           Long phimId,
+           LocalDate ngayChieu,
+           Integer tinhTrang
+   );
 
 }

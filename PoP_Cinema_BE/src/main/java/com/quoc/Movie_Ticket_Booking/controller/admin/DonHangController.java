@@ -63,7 +63,7 @@ public class DonHangController {
     public ResponseEntity<?> getHoaDon(@PathVariable("maDonHang") String maDonHang,@RequestHeader("Authorization") String jwt)  {
 
         NhanVien nhanVien = nhanVienService.findUserByJwtToken(jwt);
-        Map<String, Object> byHoaDon = donHangService.getByHoaDon(maDonHang,nhanVien);
+        Map<String, Object> byHoaDon = donHangService.getByHoaDon(maDonHang);
         return new ResponseEntity<>(byHoaDon, HttpStatus.OK);
     }
 

@@ -30,7 +30,7 @@ public interface VoucherService {
 
     public ApiResponse<?> doiQuaVoucher(Long voucherId, Long userId);
 
-    public ApiResponse<?> findQuaVoucherByMaCode(String maCode,Long userId);
+    public ApiResponse<?> findQuaVoucherByMaCode(String maCode,Integer tongTienDonHang, Long userId);
 
     public List<QuaVoucherResponseDto> getAllQuaVoucher();
 

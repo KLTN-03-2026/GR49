@@ -1,6 +1,7 @@
 package com.quoc.Movie_Ticket_Booking.controller.client;
 
 import com.quoc.Movie_Ticket_Booking.dto.request.DatVeRequestDto;
+import com.quoc.Movie_Ticket_Booking.dto.request.QuaVoucherRequestDto;
 import com.quoc.Movie_Ticket_Booking.dto.request.VoucherRequestDto;
 import com.quoc.Movie_Ticket_Booking.dto.response.ApiResponse;
 import com.quoc.Movie_Ticket_Booking.model.Users;
@@ -68,9 +69,9 @@ public class DatVeController {
     }
 
     @PostMapping("/ap-qua-voucher")
-    public ResponseEntity<?> findQuaVoucher(@RequestBody VoucherRequestDto dto, @RequestHeader("Authorization") String jwt) {
+    public ResponseEntity<?> findQuaVoucher(@RequestBody QuaVoucherRequestDto dto, @RequestHeader("Authorization") String jwt) {
         Users users= usersService.findUserByJwtToken(jwt);
-        ApiResponse<?> voucherByMaCode = voucherService.findQuaVoucherByMaCode(dto.getMaCode(),users.getId());
+        ApiResponse<?> voucherByMaCode = voucherService.findQuaVoucherByMaCode(dto.getMaCode(), dto.getTongTien(), users.getId());
         return new ResponseEntity<>(voucherByMaCode, HttpStatus.OK);
     }
 

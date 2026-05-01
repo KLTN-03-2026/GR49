@@ -8,6 +8,7 @@ import com.quoc.Movie_Ticket_Booking.model.NhanVien;
 import com.quoc.Movie_Ticket_Booking.model.PhongChieu;
 import com.quoc.Movie_Ticket_Booking.model.SuatChieu;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,8 @@ public interface SuatChieuService {
     public ApiResponse<?> createVeAuto(SuatChieuResponseDto dto, NhanVien nhanvienId);
 
     public List<SuatChieu> getSuatChieuByPhimId(Long id);
+
+    public List<SuatChieu> getSuatChieuForChat(Long phimId, LocalDate ngay);
 
 
 
